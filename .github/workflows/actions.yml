@@ -1,0 +1,31 @@
+---
+name: Check Actions
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**.yml'
+      - '.github/workflows/**.yaml'
+
+permissions: read-all
+
+jobs:
+  lint:
+    permissions:
+      contents: read
+      statuses: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - run: |
+          # https://github.com/rhysd/actionlint/blob/3a2f2c7/docs/usage.md#problem-matchers
+          # v1.7.9 SHA
+          curl -LO https://raw.githubusercontent.com/rhysd/actionlint/03d0035246f3e81f36aed592ffb4bebf33a03106/.github/actionlint-matcher.json
+          echo "::add-matcher::actionlint-matcher.json"
+      - name: Check workflow files
+        uses: docker://rhysd/actionlint:latest
+        with:
+          args: -color

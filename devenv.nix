@@ -1,12 +1,14 @@
 { pkgs, lib, config, inputs, ... }:
 
 {
-  packages = with pkgs; [ 
-    git 
+  packages = with pkgs; [
+    actionlint
+    git
     git-lfs
-    yaml2json
-    watchexec
     just
+    pinact
+    watchexec
+    yaml2json
   ];
 
   languages = {
